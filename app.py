@@ -103,12 +103,6 @@ machine = TocMachine(
             'dest': 'TinyCodeGame',
             'conditions': 'Gotcha'
         },
-
-
-
-
-
-
         {
             'trigger': 'advance',
             'source': 'user',
@@ -117,14 +111,11 @@ machine = TocMachine(
         },
         {
             'trigger': 'go_back',
-            'source' : 'TinyCodeGame',
-            'dest': 'user',
-            'conditions': 'ReturnToMenu'
-
-        },
-        {
-            'trigger': 'go_back',
-            'source' : 'BuyQuery',
+            'source' : [
+                'TinyCodeGame',
+                'BuyQuery',
+                'WeatherForecast'
+            ],
             'dest': 'user',
             'conditions': 'ReturnToMenu'
 

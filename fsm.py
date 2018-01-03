@@ -94,6 +94,7 @@ class TocMachine(GraphMachine):
         self.go_back(update)
     def on_enter_EqualToTarget(self, update):
         update.message.reply_text("中獎")
+        update.message.reply_text("結束遊戲")
         self.Got = True
         self.go_back(update)
     def on_enter_user(self, update):
@@ -115,7 +116,7 @@ class TocMachine(GraphMachine):
 
     def on_enter_WeatherForecast(self, update):
         update.message.reply_text("這是天氣查詢")
-        self.go_back(update)
+        update.message.reply_text("輸入 結束 回到主目錄")
 
     def on_exit_WeatherForecast(self, update):
         print('leave WF')
