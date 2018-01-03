@@ -28,9 +28,12 @@ machine = TocMachine(
         'BuyQuery',
         'BuyResult',
         'TinyCodeGame',
-        'SettingGame',
         'StartSet',
         'EndSet',
+        'StartGame',
+        'LargerThanTarget',
+        'SmallerThanTarget',
+        'EqualToTarget',
         'WeatherForecast'
     ],
     transitions=[
@@ -55,9 +58,57 @@ machine = TocMachine(
         {
             'trigger': 'advance',
             'source': 'TinyCodeGame',
-            'dest': 'SettingGame',
+            'dest': 'StartSet',
             'conditions': 'GoingToGameSetting'
         },
+        {
+            'trigger': 'advance',
+            'source': 'StartSet',
+            'dest': 'EndSet',
+            'conditions': 'VerifyStartSet'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'EndSet',
+            'dest': 'StartGame',
+            'conditions': 'VerifyEndSet'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'TinyCodeGame',
+            'dest': 'StartGame',
+            'conditions': 'StartTheGame'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'StartGame',
+            'dest': 'LargerThanTarget',
+            'conditions': 'Large'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'StartGame',
+            'dest': 'SmallerThanTarget',
+            'conditions': 'Small'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'StartGame',
+            'dest': 'EqualToTarget',
+            'conditions': 'Bang'
+        },
+        {
+            'trigger': 'go_back',
+            'source': 'StartGame',
+            'dest': 'TinyCodeGame',
+            'conditions': 'Gotcha'
+        },
+
+
+
+
+
+
         {
             'trigger': 'advance',
             'source': 'user',
@@ -80,12 +131,24 @@ machine = TocMachine(
         },
         {
             'trigger': 'go_back',
-            'source': [
-                'BuyResult',
-                'WeatherForecast'
+            'source' : 'BuyResult',
+            'dest': 'BuyQuery'
+        },
+
+        {
+            'trigger': 'go_back',
+            'source' : [
+                'LargerThanTarget',
+                'SmallerThanTarget',
+                'EqualToTarget',
             ],
-            'dest': 'user'
+            'dest': 'StartGame'
         }
+
+
+
+
+
     ],
     initial='user',
     auto_transitions=False,
