@@ -1,5 +1,7 @@
 from transitions.extensions import GraphMachine 
 import random
+import xml.etree.ElementTree as ET
+import requests
 
 class TocMachine(GraphMachine):
     
@@ -10,7 +12,11 @@ class TocMachine(GraphMachine):
         self.guess = -1
         self.Got = False
         self.object = ''
+        self.city = ''
         self.url_prefix = "http://ecshweb.pchome.com.tw/search/v3.3/?q="
+        self.cwb = 'http://opendata.cwb.gov.tw/opendataapi?dataid=F-C0032-001&authorizationkey=CWB-3EA4047F-0B3D-4EC3-81BE-FEA95F398D0D'
+        self.weather_object = requests.get(self.cwb)
+        self.tree = ET.parse(self.weather_object.text)
         self.machine = GraphMachine(
             model=self,
             **machine_configs
@@ -63,7 +69,7 @@ class TocMachine(GraphMachine):
         update.message.reply_text("輸入 遊戲設定 調整範圍")
         update.message.reply_text("輸入 開始遊戲 進入遊戲")
         update.message.reply_text("目前範圍 %s 到 %s", self.start, self.end)
-    
+
     def on_enter_StartSet(self, update):
         update.message.reply_text("這裡會設定數字範圍")
         update.message.reply_text("輸入起始數字 最小 0")
@@ -102,6 +108,7 @@ class TocMachine(GraphMachine):
         update.message.reply_text('輸入 天氣查詢 進入 天氣查詢系統')
         update.message.reply_text('輸入 購物查詢 進入 商品查詢系統')
         update.message.reply_text('輸入 終極密碼遊戲 進入 小遊戲')
+    def InputCity(self, update):
 
 
 
@@ -117,7 +124,7 @@ class TocMachine(GraphMachine):
     def on_enter_WeatherForecast(self, update):
         update.message.reply_text("這是天氣查詢")
         update.message.reply_text("輸入 結束 回到主目錄")
-
+        update.message.reply_text("輸入台灣縣市名稱")
     def on_exit_WeatherForecast(self, update):
         print('leave WF')
     

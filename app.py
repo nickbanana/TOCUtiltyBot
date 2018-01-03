@@ -11,7 +11,7 @@ from fsm import TocMachine
 
 API_TOKEN = '494050999:AAG2K3npCF38DKLrnEcColHpf8wdskrzRR8'
 CWB_TOKEN = 'CWB-3EA4047F-0B3D-4EC3-81BE-FEA95F398D0D'
-CWB_URL = 'http://opendata.cwb.gov.tw/opendataapi?dataid=F-C0032-001&authorizationkey=CWB-3EA4047F-0B3D-4EC3-81BE-FEA95F398D0D'
+
 
 HookURL = 'https://api.telegram.org/bot'+ API_TOKEN + '/setWebhook?url='+ sys.argv[1] +'/webhooks/telegram_vnko2phmnkasjdfkpoh23kojsoagk1243y9'
 
@@ -34,7 +34,8 @@ machine = TocMachine(
         'LargerThanTarget',
         'SmallerThanTarget',
         'EqualToTarget',
-        'WeatherForecast'
+        'WeatherForecast',
+        'WFResult'
     ],
     transitions=[
         {
@@ -54,6 +55,12 @@ machine = TocMachine(
             'source': 'user',
             'dest': 'TinyCodeGame',
             'conditions': 'GoingToTinyCodeGame'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'WeatherForecast',
+            'dest': 'WFResult',
+            'conditions': 'InputCity'
         },
         {
             'trigger': 'advance',
