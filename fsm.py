@@ -1,5 +1,4 @@
 from transitions.extensions import GraphMachine
-import pygraphviz
 
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
