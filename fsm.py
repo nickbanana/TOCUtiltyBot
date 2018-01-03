@@ -7,28 +7,35 @@ class TocMachine(Machine):
             **machine_configs
         )
 
-    def is_going_to_state1(self, update):
+    def GoingToBuyQuery(self, update):
         text = update.message.text
-        return text.lower() == 'go to state1'
-        
-    def is_going_to_WF(self, update):
-        text = update.message.text
-        return text.lower() == 'go to state1'
+        return text == '購物查詢'
 
-    def is_going_to_state2(self, update):
+    def GoingToWeatherForecast(self, update):
         text = update.message.text
-        return text.lower() == 'go to state2'
+        return text == '天氣查詢'
 
-    def on_enter_state1(self, update):
-        update.message.reply_text("I'm entering state1")
+    def GoingToTinyCodeGame(self, update):
+        text = update.message.text
+        return text == '終極密碼遊戲'
+
+    def on_enter_BuyQuery(self, update):
+        update.message.reply_text("這是購物查詢")
         self.go_back(update)
 
-    def on_exit_state1(self, update):
-        print('Leaving state1')
+    def on_exit_BuyQuery(self, update):
+        print('Leaving buyq')
 
-    def on_enter_state2(self, update):
-        update.message.reply_text("I'm entering state2")
+    def on_enter_TinyCodeGame(self, update):
+        update.message.reply_text("這是終極密碼小遊戲")
         self.go_back(update)
 
-    def on_exit_state2(self, update):
-        print('Leaving state2')
+    def on_exit_TinyCodeGame(self, update):
+        print('Leaving tinycode')
+    
+    def on_enter_WeatherForecast(self, update):
+        update.message.reply_text("這是天氣查詢")
+        self.go_back(update)
+
+    def on_exit_WeatherForecast(self, update):
+        print('leave WF')

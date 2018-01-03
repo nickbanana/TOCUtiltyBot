@@ -38,8 +38,17 @@ machine = TocMachine(
             'trigger': 'advance',
             'source': 'user',
             'dest': 'WeatherForecast',
-            'conditions': 'is_going_to_WF'
+            'conditions': 'GoingToWeatherForecast'
         },
+        {
+            'trigger': 'go_back',
+            'source': [
+                'BuyQuery',
+                'TinyCodeGame',
+                'WeatherForecast'
+            ],
+            'dest': 'user'
+        }
     ],
     initial='user',
     auto_transitions=False,
@@ -68,9 +77,9 @@ def show_fsm():
 @app.route('/webhooks/telegram_vnko2phmnkasjdfkpoh23kojsoagk1243y9', methods=['POST'])
 def webhook_handler():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
-    #text = update.message.text
-    #update.message.reply_text(text)
-    machine.advance(update)
+    text = update.message.text
+    update.message.reply_text(text)
+    #machine.advance(update)
     return 'ok'
 
 
