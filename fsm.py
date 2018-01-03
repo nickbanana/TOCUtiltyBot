@@ -1,4 +1,4 @@
-from transitions import Machine
+from transitions.extensions import GraphMachine as Machine
 
 class TocMachine(Machine):
     def __init__(self, **machine_configs):
@@ -8,6 +8,10 @@ class TocMachine(Machine):
         )
 
     def is_going_to_state1(self, update):
+        text = update.message.text
+        return text.lower() == 'go to state1'
+        
+    def is_going_to_WF(self, update):
         text = update.message.text
         return text.lower() == 'go to state1'
 

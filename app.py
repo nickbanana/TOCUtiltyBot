@@ -9,59 +9,54 @@ from fsm import TocMachine
 
 
 API_TOKEN = '494050999:AAG2K3npCF38DKLrnEcColHpf8wdskrzRR8'
-WEBHOOK_URL = 'https://thm-of-calc-bot.herokuapp.com'
+CWB_TOKEN = 'CWB-3EA4047F-0B3D-4EC3-81BE-FEA95F398D0D'
+CWB_URL = 'http://opendata.cwb.gov.tw/opendataapi?dataid=F-C0032-001&authorizationkey=CWB-3EA4047F-0B3D-4EC3-81BE-FEA95F398D0D'
 
 app = Flask(__name__)
 bot = telegram.Bot(token=API_TOKEN)
 machine = TocMachine(
     states=[
         'user',
-        'state1',
-        'state2'
+        'BuyQuery',
+        'TinyCodeGame',
+        'WeatherForecast'
     ],
     transitions=[
         {
             'trigger': 'advance',
             'source': 'user',
-            'dest': 'state1',
-            'conditions': 'is_going_to_state1'
+            'dest': 'BuyQuery',
+            'conditions': 'GoingToBuyQuery'
         },
         {
             'trigger': 'advance',
             'source': 'user',
-            'dest': 'state2',
-            'conditions': 'is_going_to_state2'
+            'dest': 'TinyCodeGame',
+            'conditions': 'GoingToTinyCodeGame'
         },
         {
-            'trigger': 'go_back',
-            'source': [
-                'state1',
-                'state2'
-            ],
-            'dest': 'user'
-        }
+            'trigger': 'advance',
+            'source': 'user',
+            'dest': 'WeatherForecast',
+            'conditions': 'is_going_to_WF'
+        },
     ],
     initial='user',
     auto_transitions=False,
+    show_conditions=True,
 )
 
 
-def _set_webhook():
-    status = bot.set_webhook(WEBHOOK_URL)
-    if not status:
-        print('Webhook setup failed')
-        sys.exit(1)
-    else:
-        print('Your webhook URL has been set to "{}"'.format(WEBHOOK_URL))
 
 
-@app.route('/hook', methods=['POST'])
-def webhook_handler():
-    update = telegram.Update.de_json(request.get_json(force=True), bot)
-    text = update.message.text
-    update.message.reply_text(text)
+
+#@app.route('/hook', methods=['POST'])
+#def webhook_handler():
+#    update = telegram.Update.de_json(request.get_json(force=True), bot)
+#    text = update.message.text
+#    update.message.reply_text(text)
     #machine.advance(update)
-    return 'ok'
+#    return 'ok'
 
 @app.route('/show-fsm', methods=['GET'])
 def show_fsm():
@@ -70,7 +65,16 @@ def show_fsm():
     byte_io.seek(0)
     return send_file(byte_io, attachment_filename='fsm.png', mimetype='image/png')
 
+@app.route('/webhooks/telegram_vnko2phmnkasjdfkpoh23kojsoagk1243y9', methods=['POST'])
+def webhook_handler():
+    update = telegram.Update.de_json(request.get_json(force=True), bot)
+    #text = update.message.text
+    #update.message.reply_text(text)
+    machine.advance(update)
+    return 'ok'
+
+
 
 if __name__ == "__main__":
-    _set_webhook()
-    app.run()
+    #_set_webhook()
+    app.run(host='127.0.0.1', port=8443)
