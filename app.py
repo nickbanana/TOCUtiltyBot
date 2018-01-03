@@ -111,7 +111,7 @@ machine = TocMachine(
             'conditions': 'GoingToWeatherForecast'
         },
         {
-            'trigger': 'go_back',
+            'trigger': 'advance',
             'source' : [
                 'TinyCodeGame',
                 'BuyQuery',
