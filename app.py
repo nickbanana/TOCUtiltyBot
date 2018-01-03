@@ -3,7 +3,7 @@ from io import BytesIO
 
 import telegram
 import requests
-#from telegram.ext import CommandHandler
+from telegram.ext import Updater, CommandHandler
 from flask import Flask, request, send_file
 
 from fsm import TocMachine
@@ -26,7 +26,11 @@ machine = TocMachine(
     states=[
         'user',
         'BuyQuery',
+        'BuyResult',
         'TinyCodeGame',
+        'SettingGame',
+        'StartSet',
+        'EndSet',
         'WeatherForecast'
     ],
     transitions=[
@@ -38,9 +42,21 @@ machine = TocMachine(
         },
         {
             'trigger': 'advance',
+            'source': 'BuyQuery',
+            'dest': 'BuyResult',
+            'conditions': 'InputBuyObj'
+        },
+        {
+            'trigger': 'advance',
             'source': 'user',
             'dest': 'TinyCodeGame',
             'conditions': 'GoingToTinyCodeGame'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'TinyCodeGame',
+            'dest': 'SettingGame',
+            'conditions': 'GoingToGameSetting'
         },
         {
             'trigger': 'advance',
@@ -57,8 +73,15 @@ machine = TocMachine(
         },
         {
             'trigger': 'go_back',
+            'source' : 'BuyQuery',
+            'dest': 'user',
+            'conditions': 'ReturnToMenu'
+
+        },
+        {
+            'trigger': 'go_back',
             'source': [
-                'BuyQuery',
+                'BuyResult',
                 'WeatherForecast'
             ],
             'dest': 'user'
