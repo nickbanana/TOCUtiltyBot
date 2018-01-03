@@ -16,7 +16,7 @@ class TocMachine(GraphMachine):
         self.url_prefix = "http://ecshweb.pchome.com.tw/search/v3.3/?q="
         self.cwb = 'http://opendata.cwb.gov.tw/opendataapi?dataid=F-C0032-001&authorizationkey=CWB-3EA4047F-0B3D-4EC3-81BE-FEA95F398D0D'
         self.weather_object = requests.get(self.cwb)
-        self.tree = ET.parse(self.weather_object.text)
+        self.tree = ET.fromstring(self.weather_object.text)
         self.machine = GraphMachine(
             model=self,
             **machine_configs
@@ -27,7 +27,7 @@ class TocMachine(GraphMachine):
         return text == '購物查詢'
     def InputBuyObj(self, update):
         self.object = update.message.text
-        return len(self.object) != 0
+        return len(self.object) != 0 and self.object != '結束'
 
     def on_enter_BuyResult(self, update):
         update.message.reply_text(self.url_prefix + self.object)
@@ -108,7 +108,7 @@ class TocMachine(GraphMachine):
         update.message.reply_text('輸入 天氣查詢 進入 天氣查詢系統')
         update.message.reply_text('輸入 購物查詢 進入 商品查詢系統')
         update.message.reply_text('輸入 終極密碼遊戲 進入 小遊戲')
-    def InputCity(self, update):
+        
 
 
 

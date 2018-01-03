@@ -58,12 +58,6 @@ machine = TocMachine(
         },
         {
             'trigger': 'advance',
-            'source': 'WeatherForecast',
-            'dest': 'WFResult',
-            'conditions': 'InputCity'
-        },
-        {
-            'trigger': 'advance',
             'source': 'TinyCodeGame',
             'dest': 'StartSet',
             'conditions': 'GoingToGameSetting'
