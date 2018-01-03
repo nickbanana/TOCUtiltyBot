@@ -9,7 +9,7 @@ from fsm import TocMachine
 
 
 API_TOKEN = '494050999:AAG2K3npCF38DKLrnEcColHpf8wdskrzRR8'
-WEBHOOK_URL = 'https://thm-of-calc-bot.herokuapp.com/hook'
+WEBHOOK_URL = 'https://thm-of-calc-bot.herokuapp.com'
 
 app = Flask(__name__)
 bot = telegram.Bot(token=API_TOKEN)
