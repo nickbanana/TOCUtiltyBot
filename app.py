@@ -42,7 +42,7 @@ machine = TocMachine(
     ],
     initial='user',
     auto_transitions=False,
-    show_conditions=True,
+    show_conditions=True
 )
 
 
@@ -60,7 +60,7 @@ def webhook_handler():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
     machine.advance(update)
     return 'ok'
-    
+
 @app.route('/show-fsm', methods=['GET'])
 def show_fsm():
     byte_io = BytesIO()
