@@ -58,7 +58,9 @@ def _set_webhook():
 @app.route('/hook', methods=['POST'])
 def webhook_handler():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
-    machine.advance(update)
+    text = update.message.text
+    update.message.reply_text(text)
+    #machine.advance(update)
     return 'ok'
 
 @app.route('/show-fsm', methods=['GET'])
