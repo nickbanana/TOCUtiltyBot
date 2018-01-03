@@ -1,9 +1,9 @@
-from transitions.extensions import GraphMachine as Machine
+from transitions.extensions import GraphMachine 
 
-class TocMachine(Machine):
+class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
-        self.machine = Machine(
-            model = self,
+        self.machine = GraphMachine(
+            model=self,
             **machine_configs
         )
 
@@ -28,11 +28,14 @@ class TocMachine(Machine):
 
     def on_enter_TinyCodeGame(self, update):
         update.message.reply_text("這是終極密碼小遊戲")
-        self.go_back(update)
+    
+    def ReturnToMenu(self, update):
+        text = update.message.text
+        return text == '結束遊戲'
 
     def on_exit_TinyCodeGame(self, update):
         print('Leaving tinycode')
-    
+
     def on_enter_WeatherForecast(self, update):
         update.message.reply_text("這是天氣查詢")
         self.go_back(update)

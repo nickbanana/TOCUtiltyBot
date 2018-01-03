@@ -2,6 +2,7 @@ import sys
 from io import BytesIO
 
 import telegram
+import requests
 #from telegram.ext import CommandHandler
 from flask import Flask, request, send_file
 
@@ -12,8 +13,15 @@ API_TOKEN = '494050999:AAG2K3npCF38DKLrnEcColHpf8wdskrzRR8'
 CWB_TOKEN = 'CWB-3EA4047F-0B3D-4EC3-81BE-FEA95F398D0D'
 CWB_URL = 'http://opendata.cwb.gov.tw/opendataapi?dataid=F-C0032-001&authorizationkey=CWB-3EA4047F-0B3D-4EC3-81BE-FEA95F398D0D'
 
+HookURL = 'https://api.telegram.org/bot'+ API_TOKEN + '/setWebhook?url='+ sys.argv[1] +'/webhooks/telegram_vnko2phmnkasjdfkpoh23kojsoagk1243y9'
+
+
+
+
+
 app = Flask(__name__)
 bot = telegram.Bot(token=API_TOKEN)
+
 machine = TocMachine(
     states=[
         'user',
@@ -42,9 +50,15 @@ machine = TocMachine(
         },
         {
             'trigger': 'go_back',
+            'source' : 'TinyCodeGame',
+            'dest': 'user',
+            'conditions': 'ReturnToMenu'
+
+        },
+        {
+            'trigger': 'go_back',
             'source': [
                 'BuyQuery',
-                'TinyCodeGame',
                 'WeatherForecast'
             ],
             'dest': 'user'
@@ -54,18 +68,9 @@ machine = TocMachine(
     auto_transitions=False,
     show_conditions=True,
 )
-
-
-
-
-
-#@app.route('/hook', methods=['POST'])
-#def webhook_handler():
-#    update = telegram.Update.de_json(request.get_json(force=True), bot)
-#    text = update.message.text
-#    update.message.reply_text(text)
-    #machine.advance(update)
-#    return 'ok'
+def setHook():
+    r = requests.post(HookURL)
+    print(r.text)
 
 @app.route('/show-fsm', methods=['GET'])
 def show_fsm():
@@ -77,13 +82,13 @@ def show_fsm():
 @app.route('/webhooks/telegram_vnko2phmnkasjdfkpoh23kojsoagk1243y9', methods=['POST'])
 def webhook_handler():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
-    text = update.message.text
-    update.message.reply_text(text)
-    #machine.advance(update)
+    #text = update.message.text
+    #update.message.reply_text(text)
+    machine.advance(update)
     return 'ok'
 
 
 
 if __name__ == "__main__":
-    #_set_webhook()
+    setHook()
     app.run(host='127.0.0.1', port=8443)
