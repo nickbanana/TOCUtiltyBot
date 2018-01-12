@@ -9,7 +9,7 @@ from flask import Flask, request, send_file
 from fsm import TocMachine
 
 
-API_TOKEN = '494050999:AAG2K3npCF38DKLrnEcColHpf8wdskrzRR8'
+API_TOKEN = '<Telegram bot API Token>'
 CWB_TOKEN = 'CWB-3EA4047F-0B3D-4EC3-81BE-FEA95F398D0D'
 
 
@@ -26,6 +26,7 @@ machine = TocMachine(
     states=[
         'user',
         'BuyQuery',
+        'TempBuyCache',
         'BuyResult',
         'TinyCodeGame',
         'StartSet',
@@ -47,8 +48,14 @@ machine = TocMachine(
         {
             'trigger': 'advance',
             'source': 'BuyQuery',
-            'dest': 'BuyResult',
+            'dest': 'TempBuyCache',
             'conditions': 'InputBuyObj'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'TempBuyCache',
+            'dest': 'BuyResult',
+            'conditions': 'GoToResult'
         },
         {
             'trigger': 'advance',

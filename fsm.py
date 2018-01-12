@@ -58,11 +58,17 @@ class TocMachine(GraphMachine):
         return self.Got
     def BackToQuery(self, update):
         return True
+    def GoToResult(self, update):
+        return True
     def on_enter_BuyQuery(self, update):
         update.message.reply_text("這是購物查詢 請輸入想查詢的物品 輸入 結束 回到主目錄")
 
     def on_exit_BuyQuery(self, update):
         print('Leaving buyq')
+    def on_enter_TempBuyCache(self, update):
+        update.message.reply_text("你輸入的字串是"+ self.object)
+    def on_exit_TempBuyCache(self, update):
+        update.message.reply_text("顯示結果")
 
     def on_enter_TinyCodeGame(self, update):
         update.message.reply_text("這是終極密碼小遊戲")
